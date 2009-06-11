@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "bin/git-media",
+     "git-media.gemspec",
      "lib/git-media.rb",
      "lib/git-media/clean.rb",
      "lib/git-media/smudge.rb",

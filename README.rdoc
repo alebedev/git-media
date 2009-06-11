@@ -1,6 +1,38 @@
 = git-media
 
-Description goes here.
+GitMedia extension allows you to use Git with large media files
+without storing the media in Git itself.
+
+== Usage
+
+Setup the alias and attributes filter settings.
+
+	(once after install)
+	$ git-media setup (media)
+
+Setup the .gitattributes file to map extensions to the filter.
+
+	(in repo - once)
+	$ git media attributes (full/movies) > .gitattributes  
+
+Staging files with those extensions will automatically copy them to the 
+media buffer area (.git/media) until you run 'git media sync' wherein they
+are uploaded.  Checkouts that reference media you don't have yet will try to 
+be automatically downloaded, otherwise they are downloaded when you sync.
+
+	(in repo - repeatedly)
+	$ (hack, stage, commit)
+	$ git media sync
+
+== Config Settings
+
+	$ git config --global media.auto-download false
+
+
+== Install
+
+  $ sudo gem install trollop
+  $ sudo gem install schacon-git-media --source=http://gems.github.com
 
 == Copyright
 

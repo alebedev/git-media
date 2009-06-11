@@ -1,0 +1,7 @@
+= git-media
+
+Description goes here.
+
+== Copyright
+
+Copyright (c) 2009 Scott Chacon. See LICENSE for details.

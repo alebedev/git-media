@@ -16,6 +16,7 @@ module GitMedia
     File.join(buf, sha)    
   end
 
+  # TODO: select the proper transports based on settings
   def self.get_push_transport
     GitMedia::Transport::Local.new('/opt/media')
   end

@@ -1,5 +1,5 @@
 module GitMedia
-  class Smudge
+  module Smudge
 
     def self.run!
       media_buffer = GitMedia.setup_media_buffer
@@ -21,7 +21,7 @@ module GitMedia
           # TODO: download file if not in the media buffer area
           if !can_download
             STDERR.puts('media missing, saving placeholder : ' + sha)
-            print "MEDIA:" + sha
+            puts sha
           end
         end
       else
@@ -32,7 +32,6 @@ module GitMedia
         end
       end
     end
-
 
   end
 end

@@ -3,7 +3,7 @@ require 'fileutils'
 require 'tempfile'
 
 module GitMedia
-  class Clean
+  module Clean
 
     def self.run!
       # determine and initialize our media buffer directory
@@ -12,6 +12,8 @@ module GitMedia
       hashfunc = Digest::SHA1.new
       start = Time.now
 
+      # TODO: read first 41 bytes and see if this is a stub
+      
       # read in buffered chunks of the data
       #  calculating the SHA and copying to a tempfile
       tempfile = Tempfile.new('media')
@@ -21,7 +23,7 @@ module GitMedia
       end
       tempfile.close
 
-      # calculate and print the SHA of the data 
+      # calculate and print the SHA of the data
       puts hx = hashfunc.hexdigest 
 
       # move the tempfile to our media buffer area

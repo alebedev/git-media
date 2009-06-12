@@ -1,0 +1,12 @@
+== Tools
+
+	* tool to clean large files out of existing repo (filter-branch?)
+	  - can also just re-do the last commit with a new filter
+
+== Transports
+
+	* Local
+	* SCP
+	* SFTP
+	* Amazon S3
+	* FTP

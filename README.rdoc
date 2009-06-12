@@ -24,6 +24,16 @@ be automatically downloaded, otherwise they are downloaded when you sync.
 	$ (hack, stage, commit)
 	$ git media sync
 
+You can also check the status of your media files via 
+
+	$ git media status
+
+Which will show you files that are waiting to be uploaded and how much data
+that is, data in your buffer that you can purge (already uploaded)
+
+	$ git media purge (--old)
+	$ git media purge --all
+
 == Config Settings
 
 	$ git config --global media.auto-download false

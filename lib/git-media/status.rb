@@ -4,9 +4,11 @@ module GitMedia
   module Status
 
     def self.run!
-      # look for files with 41 bytes, if file on disk matches and all hex
+      @push = GitMedia.get_push_transport
       r = self.find_references
-      pp r
+      self.print_references(r)
+      r = self.local_cache_status
+      self.print_cache_status(r)
     end
     
     # find tree entries that are likely media references
@@ -33,5 +35,73 @@ module GitMedia
       end
       references
     end
+
+    def self.print_references(refs)
+      if refs[:to_expand].size > 0
+        puts "== Unexpanded Media =="
+        refs[:to_expand].each do |file, sha|
+          puts "   " + sha[0, 8] + " " + file
+        end
+        puts
+      end
+      if refs[:expanded].size > 0
+        puts "== Expanded Media =="
+        refs[:expanded].each do |file|
+          size = File.size(file)
+          puts "   " + "(#{self.to_human(size)})".ljust(8) + " #{file}"          
+        end
+        puts
+      end
+      if refs[:deleted].size > 0
+        puts "== Deleted Media =="
+        refs[:deleted].each do |file|
+          puts "           " + " #{file}"          
+        end
+        puts
+      end
+    end
+
+    def self.print_cache_status(refs)
+      if refs[:unpushed].size > 0
+        puts "== Unpushed Media =="
+        refs[:unpushed].each do |sha|
+          cache_file = GitMedia.media_path(sha)
+          size = File.size(cache_file)
+          puts "   " + "(#{self.to_human(size)})".ljust(8) + ' ' + sha[0, 8]
+        end
+        puts
+      end
+      if refs[:pushed].size > 0
+        puts "== Already Pushed Media =="
+        refs[:pushed].each do |sha|
+          cache_file = GitMedia.media_path(sha)
+          size = File.size(cache_file)
+          puts "   " + "(#{self.to_human(size)})".ljust(8) + ' ' + sha[0, 8]          
+        end
+        puts
+      end
+    end
+
+    def self.local_cache_status
+      # find files in media buffer and upload them
+      references = {:unpushed => [], :pushed => []}
+      all_cache = Dir.chdir(GitMedia.get_media_buffer) { Dir.glob('*') }
+      unpushed_files = @push.get_unpushed(all_cache)
+      references[:unpushed] = unpushed_files
+      references[:pushed] = all_cache - unpushed_files
+      references
+    end
+
+
+    def self.to_human(size)
+      if size < 1024
+        return size.to_s + 'b'
+      elsif size < 1048576
+        return (size / 1024).to_s + 'k'
+      else
+        return (size / 1048576).to_s + 'm'
+      end 
+    end
+    
   end
 end

@@ -1,8 +1,8 @@
 module GitMedia
-  module Smudge
+  module FilterSmudge
 
     def self.run!
-      media_buffer = GitMedia.setup_media_buffer
+      media_buffer = GitMedia.get_media_buffer
       can_download = false # TODO: read this from config and implement
       
       # read checksum size

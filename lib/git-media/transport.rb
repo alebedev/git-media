@@ -7,6 +7,11 @@ module GitMedia
         get_file(sha, to_file)
       end
 
+      def push(sha)
+        from_file = GitMedia.media_path(sha)
+        put_file(sha, from_file)
+      end
+
       ## OVERWRITE ##
       
       def read?
@@ -23,6 +28,10 @@ module GitMedia
 
       def put_file(sha, to_file)
         false
+      end
+      
+      def get_unpushed(files)
+        files
       end
       
     end

@@ -3,11 +3,11 @@ require 'fileutils'
 require 'tempfile'
 
 module GitMedia
-  module Clean
+  module FilterClean
 
     def self.run!
       # determine and initialize our media buffer directory
-      media_buffer = GitMedia.setup_media_buffer
+      media_buffer = GitMedia.get_media_buffer
 
       hashfunc = Digest::SHA1.new
       start = Time.now

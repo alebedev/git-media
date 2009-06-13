@@ -4,7 +4,7 @@ require 'git-media/transport/local'
 
 module GitMedia
 
-  def self.setup_media_buffer
+  def self.get_media_buffer
     @@git_dir ||= `git rev-parse --git-dir`.chomp
     media_buffer = File.join(@@git_dir, 'media/objects')
     FileUtils.mkdir_p(media_buffer) if !File.exist?(media_buffer)
@@ -12,7 +12,7 @@ module GitMedia
   end
 
   def self.media_path(sha)
-    buf = self.setup_media_buffer
+    buf = self.get_media_buffer
     File.join(buf, sha)    
   end
 
@@ -30,12 +30,15 @@ module GitMedia
       
       cmd = ARGV.shift # get the subcommand
       cmd_opts = case cmd
-        when "clean" # parse delete options
-          require 'git-media/clean'
-          GitMedia::Clean.run!
-        when "smudge"
-          require 'git-media/smudge'
-          GitMedia::Smudge.run!
+        when "filter-clean" # parse delete options
+          require 'git-media/filter-clean'
+          GitMedia::FilterClean.run!
+        when "filter-smudge"
+          require 'git-media/filter-smudge'
+          GitMedia::FilterSmudge.run!
+        when "clear" # parse delete options
+          require 'git-media/clear'
+          GitMedia::Clear.run!
         when "sync"
           require 'git-media/sync'
           GitMedia::Sync.run!

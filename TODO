@@ -3,10 +3,12 @@
 	* tool to clean large files out of existing repo (filter-branch?)
 	  - can also just re-do the last commit with a new filter
 
+	* git media add (file) - adds it to the .gitattributes file
+
 == Transports
 
 	* Local
+	* Amazon S3
 	* SCP
 	* SFTP
-	* Amazon S3
 	* FTP

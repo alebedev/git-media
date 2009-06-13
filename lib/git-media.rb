@@ -1,6 +1,7 @@
 require 'trollop'
 require 'fileutils'
 require 'git-media/transport/local'
+require 'git-media/transport/s3'
 
 module GitMedia
 
@@ -15,14 +16,15 @@ module GitMedia
     buf = self.get_media_buffer
     File.join(buf, sha)    
   end
-
+  
   # TODO: select the proper transports based on settings
   def self.get_push_transport
-    GitMedia::Transport::Local.new('/opt/media')
+    #GitMedia::Transport::Local.new('/opt/media')
+    #GitMedia::Transport::S3.new('chaconmedia', ACCESS_KEY, SECRET_KEY)
   end
 
   def self.get_pull_transport
-    GitMedia::Transport::Local.new('/opt/media')
+    #GitMedia::Transport::S3.new('chaconmedia', ACCESS_KEY, SECRET_KEY)
   end
 
   module Application

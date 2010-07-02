@@ -23,22 +23,23 @@ Gem::Specification.new do |s|
      "VERSION",
      "bin/git-media",
      "git-media.gemspec",
-     "lib/git-media.rb",
-     "lib/git-media/clean.rb",
-     "lib/git-media/smudge.rb",
-     "test/git-media_test.rb",
-     "test/test_helper.rb"
+     "lib/git-media/clear.rb",
+     "lib/git-media/filter-clean.rb",
+     "lib/git-media/filter-smudge.rb",
+     "lib/git-media/status.rb",
+     "lib/git-media/sync.rb",
+     "lib/git-media/transport",
+     "lib/git-media/transport/local.rb",
+     "lib/git-media/transport/s3.rb",
+     "lib/git-media/transport.rb",
+     "lib/git-media.rb"
   ]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/schacon/git-media}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.1}
-  s.summary = %q{TODO}
-  s.test_files = [
-    "test/git-media_test.rb",
-     "test/test_helper.rb"
-  ]
+  s.summary = %q{"This is a summary! Stop yer whining"}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
@@ -50,3 +51,4 @@ Gem::Specification.new do |s|
   else
   end
 end
+

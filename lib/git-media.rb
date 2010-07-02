@@ -2,6 +2,7 @@ require 'trollop'
 require 'fileutils'
 require 'git-media/transport/local'
 require 'git-media/transport/s3'
+require 'git-media/transport/scp'
 
 module GitMedia
 
@@ -26,6 +27,21 @@ module GitMedia
     case `git config git-media.transport`.chomp
     when ""
       raise "git-media.transport not set"
+    when "scp"
+      user = `git config git-media.scpuser`.chomp
+      host = `git config git-media.scphost`.chomp
+      path = `git config git-media.scppath`.chomp
+      if user === ""
+	raise "git-media.scpuser not set for scp transport"
+      end
+      if host === ""
+	raise "git-media.scphost not set for scp transport"
+      end
+      if path === ""
+	raise "git-media.scppath not set for scp transport"
+      end
+      GitMedia::Transport::Scp.new(user, host, path)
+
     when "local"
       path = `git config git-media.localpath`.chomp
       if path === ""

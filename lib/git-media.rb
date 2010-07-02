@@ -51,7 +51,7 @@ module GitMedia
           end
           GitMedia::Status.run!
         else
-          Trollop::die "unknown media subcommand #{cmd.inspect}"
+          raise "unknown media subcommand #{cmd.inspect}"
         end
       
     end

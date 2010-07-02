@@ -19,12 +19,38 @@ module GitMedia
   
   # TODO: select the proper transports based on settings
   def self.get_push_transport
-    #GitMedia::Transport::Local.new('/opt/media')
-    #GitMedia::Transport::S3.new('chaconmedia', ACCESS_KEY, SECRET_KEY)
+    self.get_transport
+  end
+
+  def self.get_transport
+    case `git config git-media.transport`.chomp
+    when ""
+      raise "git-media.transport not set"
+    when "local"
+      path = `git config git-media.localpath`.chomp
+      if path === ""
+	raise "git-media.localpath not set for local transport"
+      end
+      GitMedia::Transport::Local.new(path)
+    when "s3"
+      bucket = `git config git-media.s3bucket`.chomp
+      key = `git config git-media.s3key`.chomp
+      secret = `git config git-media.s3secret`.chomp
+      if bucket === ""
+	raise "git-media.s3bucket not set for s3 transport"
+      end
+      if key === ""
+	raise "git-media.s3key not set for s3 transport"
+      end
+      if secret === ""
+	raise "git-media.s3secret not set for s3 transport"
+      end
+      GitMedia::Transport::S3.new(bucket, key, secret)
+    end
   end
 
   def self.get_pull_transport
-    #GitMedia::Transport::S3.new('chaconmedia', ACCESS_KEY, SECRET_KEY)
+    self.get_transport
   end
 
   module Application

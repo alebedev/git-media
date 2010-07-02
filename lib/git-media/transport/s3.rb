@@ -1,11 +1,10 @@
 require 'git-media/transport'
 require 'right_aws'
 
-# media.transport s3
-# media.s3.bucket
-# media.s3.access_key_id
-# media.s3.secret_access_key
-# media.s3.log
+# git-media.transport s3
+# git-media.s3bucket
+# git-media.s3key
+# git-media.s3secret
 
 module GitMedia
   module Transport

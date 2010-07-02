@@ -1,9 +1,11 @@
 require 'git-media/transport'
 
-# move large media to local bin
+# move large media to remote server via SCP
 
-# media.transport local
-# media.local.path /opt/media
+# git-media.transport scp
+# git-media.scpuser someuser
+# git-media.scphost remoteserver.com
+# git-media.scppath /opt/media
 
 module GitMedia
   module Transport

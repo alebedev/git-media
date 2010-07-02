@@ -2,8 +2,8 @@ require 'git-media/transport'
 
 # move large media to local bin
 
-# media.transport local
-# media.local.path /opt/media
+# git-media.transport local
+# git-media.localpath /opt/media
 
 module GitMedia
   module Transport

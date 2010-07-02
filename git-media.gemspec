@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
      "lib/git-media/transport",
      "lib/git-media/transport/local.rb",
      "lib/git-media/transport/s3.rb",
+     "lib/git-media/transport/scp.rb",
      "lib/git-media/transport.rb",
      "lib/git-media.rb"
   ]

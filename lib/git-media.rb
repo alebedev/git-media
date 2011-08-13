@@ -94,7 +94,14 @@ module GitMedia
           end
           GitMedia::Status.run!
         else
-          raise "unknown media subcommand #{cmd.inspect}"
+	  print <<EOF
+usage: git media sync|status|clear
+
+  sync		Sync files with remote server
+  status	Show files that are waiting to be uploaded and file size
+  clear		Upload and delete the local cache of media files
+
+EOF
         end
       
     end

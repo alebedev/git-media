@@ -88,6 +88,8 @@ module GitMedia
       url = `git config git-media.webdavurl`.chomp
       user = `git config git-media.webdavuser`.chomp
       password = `git config git-media.webdavpassword`.chomp
+      verity_server = `git config git-media.webdavverifyserver`.chomp == 'true'
+      binary_transfer = `git config git-media.webdavbinarytransfer`.chomp == 'true'
       if url == ""
         raise "git-media.webdavurl not set for webdav transport"
       end
@@ -97,7 +99,7 @@ module GitMedia
       if password == ""
         raise "git-media.webdavpassword not set for webdav transport"
       end
-      GitMedia::Transport::WebDav.new(url, user, password)
+      GitMedia::Transport::WebDav.new(url, user, password, verity_server, binary_transfer)
     else
       raise "Invalid transport #{transport}"
     end

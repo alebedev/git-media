@@ -10,13 +10,11 @@ require 'net/dav'
 module GitMedia
   module Transport
     class WebDav < Base
-      def initialize(url, user, password)
+      def initialize(url, user, password, verify_server=true, binary_transfer=false)
         @uri = URI(url)
-        @dav = Net::DAV.new(url)
-        # Faster binary transport, but requires curb gem
-        #@dav = Net::DAV.new(url, :curl => false)
-
-        @dav.verify_server = false
+        # Faster binary transport requires curb gem
+        @dav = Net::DAV.new(url, :curl => (not binary_transfer))
+        @dav.verify_server = verify_server
         @dav.credentials(user, password)
       end
 

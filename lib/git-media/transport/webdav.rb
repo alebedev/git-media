@@ -13,7 +13,7 @@ module GitMedia
       def initialize(url, user, password, verify_server=true, binary_transfer=false)
         @uri = URI(url)
         # Faster binary transport requires curb gem
-        @dav = Net::DAV.new(url, :curl => (not binary_transfer))
+        @dav = Net::DAV.new(url, :curl => (binary_transfer))
         @dav.verify_server = verify_server
         @dav.credentials(user, password)
       end

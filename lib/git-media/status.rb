@@ -20,7 +20,8 @@ module GitMedia
       files = files.select { |f| f[0] == '41' } # it's the right size
       files.each do |tree_size, fname|
         if size = File.size?(fname)
-          if size == tree_size.to_i
+          # Windows newlines can offset file size by 1
+          if size == tree_size.to_i or size == tree_size.to_i + 1
             # TODO: read in the data and verify that it's a sha + newline
             fname = fname.tr("\\","") #remove backslash
             sha = File.read(fname).strip

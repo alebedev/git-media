@@ -3,9 +3,6 @@ require 'git-media/transport'
 require 'uri'
 require 'net/dav'
 
-# git-media.webdav url
-# git-media.webdav user
-# git-media.webdav password
 
 module GitMedia
   module Transport
@@ -16,14 +13,15 @@ module GitMedia
         @dav = Net::DAV.new(url, :curl => (binary_transfer))
         @dav.verify_server = verify_server
         @dav.credentials(user, password)
+        @has_connection = @dav.exists?('.')
       end
 
       def read?
-        true # TODO: Implement
+        @has_connection
       end
 
       def write?
-        true # TODO: Implement
+        @has_connection
       end
 
       def get_path(path)

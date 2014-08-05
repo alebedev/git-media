@@ -13,7 +13,9 @@ module GitMedia
         @dav = Net::DAV.new(url, :curl => (binary_transfer))
         @dav.verify_server = verify_server
         @dav.credentials(user, password)
+        print 'checking connection... '
         @has_connection = @dav.exists?('.')
+        puts (if @has_connection then 'ok' else 'failed' end)
       end
 
       def read?

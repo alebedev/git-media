@@ -99,7 +99,7 @@ module GitMedia
       if password == ""
         raise "git-media.webdavpassword not set for webdav transport"
       end
-      GitMedia::Transport::WebDav.new(url, user, password, verity_server, binary_transfer)
+      GitMedia::Transport::WebDav.new(url, user, password, verify_server, binary_transfer)
     else
       raise "Invalid transport #{transport}"
     end

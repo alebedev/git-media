@@ -1,4 +1,12 @@
+require 'rubygems'
+require 'bundler/setup'
+
 require 'trollop'
+#require 's3'
+#require 'ruby-atmos-pure'
+#require 'right_aws'
+#require 'net/dav'
+
 require 'fileutils'
 require 'git-media/transport/local'
 require 'git-media/transport/s3'
@@ -132,6 +140,9 @@ module GitMedia
             opt :force, "Force status"
           end
           GitMedia::Status.run!
+        when 'update-index'
+          require 'git-media/update-index'
+          GitMedia::UpdateIndex.run!
         else
 	  print <<EOF
 usage: git media sync|status|clear

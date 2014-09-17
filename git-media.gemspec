@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
      "lib/git-media/filter-smudge.rb",
      "lib/git-media/status.rb",
      "lib/git-media/sync.rb",
+     "lib/git-media/update-index.rb",
      "lib/git-media/transport",
      "lib/git-media/transport/local.rb",
      "lib/git-media/transport/s3.rb",

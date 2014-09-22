@@ -1,5 +1,7 @@
 require 'git-media/transport'
+require 'ruby-atmos-pure'
 require 'atmos'
+
 
 # git-media.transport atmos
 # git-media.endpoint

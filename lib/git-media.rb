@@ -2,15 +2,8 @@ require 'rubygems'
 require 'bundler/setup'
 
 require 'trollop'
-#require 's3'
-#require 'ruby-atmos-pure'
-#require 'right_aws'
-#require 'net/dav'
-
 require 'fileutils'
-require 'git-media/transport/local'
-require 'git-media/transport/s3'
-require 'git-media/transport/scp'
+#
 
 module GitMedia
 
@@ -36,44 +29,54 @@ module GitMedia
     case transport
     when ""
       raise "git-media.transport not set"
+
     when "scp"
+      require 'git-media/transport/scp'
+
       user = `git config git-media.scpuser`.chomp
       host = `git config git-media.scphost`.chomp
       path = `git config git-media.scppath`.chomp
       port = `git config git-media.scpport`.chomp
       if user === ""
-	raise "git-media.scpuser not set for scp transport"
+	      raise "git-media.scpuser not set for scp transport"
       end
       if host === ""
-	raise "git-media.scphost not set for scp transport"
+	      raise "git-media.scphost not set for scp transport"
       end
       if path === ""
-	raise "git-media.scppath not set for scp transport"
+        raise "git-media.scppath not set for scp transport"
       end
       GitMedia::Transport::Scp.new(user, host, path, port)
 
     when "local"
+      require 'git-media/transport/local'
+
       path = `git config git-media.localpath`.chomp
       if path === ""
-	raise "git-media.localpath not set for local transport"
+        raise "git-media.localpath not set for local transport"
       end
       GitMedia::Transport::Local.new(path)
+
     when "s3"
+      require 'git-media/transport/s3'
+
       bucket = `git config git-media.s3bucket`.chomp
       key = `git config git-media.s3key`.chomp
       secret = `git config git-media.s3secret`.chomp
       if bucket === ""
-	raise "git-media.s3bucket not set for s3 transport"
+	      raise "git-media.s3bucket not set for s3 transport"
       end
       if key === ""
-	raise "git-media.s3key not set for s3 transport"
+	      raise "git-media.s3key not set for s3 transport"
       end
       if secret === ""
-	raise "git-media.s3secret not set for s3 transport"
+	      raise "git-media.s3secret not set for s3 transport"
       end
       GitMedia::Transport::S3.new(bucket, key, secret)
+
     when "atmos"
       require 'git-media/transport/atmos_client'
+
       endpoint = `git config git-media.endpoint`.chomp
       uid = `git config git-media.uid`.chomp
       secret = `git config git-media.secret`.chomp
@@ -140,9 +143,6 @@ module GitMedia
             opt :force, "Force status"
           end
           GitMedia::Status.run!
-        when 'update-index'
-          require 'git-media/update-index'
-          GitMedia::UpdateIndex.run!
         else
 	  print <<EOF
 usage: git media sync|status|clear

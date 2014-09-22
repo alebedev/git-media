@@ -1,4 +1,5 @@
 require 'git-media/transport'
+require 's3'
 require 'right_aws'
 
 # git-media.transport s3

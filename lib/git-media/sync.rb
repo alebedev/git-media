@@ -8,22 +8,23 @@ module GitMedia
     def self.run!
       @push = GitMedia.get_push_transport
       @pull = GitMedia.get_pull_transport
-      
+
       self.expand_references
+      self.update_index
       self.upload_local_cache
     end
-    
+
     def self.expand_references
       status = GitMedia::Status.find_references
       status[:to_expand].each do |file, sha|
         cache_file = GitMedia.media_path(sha)
         if !File.exist?(cache_file)
           puts "Downloading " + sha[0,8] + " : " + file
-          @pull.pull(file, sha) 
+          @pull.pull(file, sha)
         end
 
         puts "Expanding  " + sha[0,8] + " : " + file
-        
+
         if File.exist?(cache_file)
           FileUtils.cp(cache_file, file)
         else
@@ -31,7 +32,13 @@ module GitMedia
         end
       end
     end
-    
+
+    def self.update_index
+      refs = GitMedia::Status.find_references
+      `git update-index --assume-unchanged -- #{refs[:expanded].join(' ')}`
+      puts "Updated git index"
+    end
+
     def self.upload_local_cache
       # find files in media buffer and upload them
       all_cache = Dir.chdir(GitMedia.get_media_buffer) { Dir.glob('*') }
@@ -42,6 +49,6 @@ module GitMedia
       end
       # TODO: if --clean, remove them
     end
-    
+
   end
 end

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'trollop'
+gem 'trollop', '~> 2.0'
 gem 's3'
 gem 'ruby-atmos-pure'
 gem 'right_aws'

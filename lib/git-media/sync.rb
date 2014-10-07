@@ -1,6 +1,7 @@
 # find files that are placeholders (41 char) and download them
 # upload files in media buffer that are not in offsite bin
 require 'git-media/status'
+require 'shellwords'
 
 module GitMedia
   module Sync
@@ -35,6 +36,7 @@ module GitMedia
 
     def self.update_index
       refs = GitMedia::Status.find_references
+      refs[:expanded] = refs[:expanded].map{ |ref| Shellwords.shellescape(ref) }
       `git update-index --assume-unchanged -- #{refs[:expanded].join(' ')}`
       puts "Updated git index"
     end

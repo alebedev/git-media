@@ -1,10 +1,9 @@
 source 'https://rubygems.org'
 
 gem 'trollop', '~> 2.0'
+gem 'right_aws', :git => 'https://github.com/rightscale/right_aws.git'
 gem 's3'
 gem 'ruby-atmos-pure'
-gem 'right_aws'
-gem 'net_dav', :git => 'https://github.com/devrandom/net_dav.git', :require => 'net/dav'
-gem 'ruby-xz' 
+gem 'net_dav'
 
 #gem 'curb', :require => false

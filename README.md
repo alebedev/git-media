@@ -82,12 +82,6 @@ that is. If you want to upload & delete the local cache of media files, run:
 
 	$ git media clear
 
-If you want to replace file in git-media with changed version (for example, video file has been edited),
-you need to explicitly tell git that some media files has changed:
-
-    $ git update-index --really-refresh
-
-
 ## Config Settings
 
 	$ git config --global media.auto-download false
@@ -95,10 +89,13 @@ you need to explicitly tell git that some media files has changed:
 
 ## Installing
 
-    $ sudo gem install bundler
-    $ bundle install
+    $ sudo gem install trollop
+    $ sudo gem install s3
+    $ sudo gem install ruby-atmos-pure
+    $ sudo gem install right_aws
+    $ sudo gem install net_dav
     $ gem build git-media.gemspec
-    $ sudo gem install git-media-*.gem
+    $ sudo gem install git-media-0.1.3.gem
 
 ## Notes for Windows
 

@@ -1,7 +1,6 @@
 # find files that are placeholders (41 char) and download them
 # upload files in media buffer that are not in offsite bin
 require 'git-media/status'
-require 'shellwords'
 
 module GitMedia
   module Sync

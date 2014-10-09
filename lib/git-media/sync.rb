@@ -35,7 +35,7 @@ module GitMedia
 
     def self.update_index
       refs = GitMedia::Status.find_references
-      `git update-index --assume-unchanged -- #{refs[:expanded].join(' ')}`
+      refs[:expanded].each{ |x| `git update-index --assume-unchanged -- "#{x}"`}
       puts "Updated git index"
     end
 

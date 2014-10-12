@@ -95,6 +95,8 @@ you need to explicitly tell git that some media files has changed:
 
 ## Installing
 
+    $ git clone git@github.com:alebedev/git-media.git
+    $ cd git-media
     $ sudo gem install bundler
     $ bundle install
     $ gem build git-media.gemspec

@@ -123,6 +123,10 @@ module GitMedia
   module Application
     def self.run!
 
+      if !system('git rev-parse')
+        return
+      end
+      
       cmd = ARGV.shift # get the subcommand
       cmd_opts = case cmd
         when "filter-clean" # parse delete options

@@ -139,10 +139,11 @@ module GitMedia
           GitMedia::Sync.run!
         when 'status'
           require 'git-media/status'
-          Trollop::options do
+          opts = Trollop::options do
             opt :force, "Force status"
+            opt :short, "Short status"
           end
-          GitMedia::Status.run!
+          GitMedia::Status.run!(opts)
         else
 	  print <<EOF
 usage: git media sync|status|clear

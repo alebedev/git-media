@@ -4,12 +4,12 @@ Encoding.default_external = Encoding::UTF_8
 module GitMedia
   module Status
 
-    def self.run!
+    def self.run!(opts)
       @push = GitMedia.get_push_transport
       r = self.find_references
-      self.print_references(r)
+      self.print_references(r, opts[:short])
       r = self.local_cache_status
-      self.print_cache_status(r)
+      self.print_cache_status(r, opts[:short])
     end
 
     # find tree entries that are likely media references
@@ -39,49 +39,70 @@ module GitMedia
       references
     end
 
-    def self.print_references(refs)
+    def self.print_references(refs, short=false)
+
       if refs[:to_expand].size > 0
         puts "== Unexpanded Media =="
-        refs[:to_expand].each do |file, sha|
-          puts "   " + sha[0, 8] + " " + file
+        if short
+          puts "Count: " + refs[:to_expand].size.to_s
+        else
+          refs[:to_expand].each do |file, sha|
+            puts "   " + sha[0, 8] + " " + file
+          end
+          puts
         end
-        puts
       end
       if refs[:expanded].size > 0
         puts "== Expanded Media =="
-        refs[:expanded].each do |file|
-          size = File.size(file)
-          puts "   " + "(#{self.to_human(size)})".ljust(8) + " #{file}"
+        if short
+          puts "Count: " + refs[:expanded].size.to_s
+        else
+          refs[:expanded].each do |file|
+            size = File.size(file)
+            puts "   " + "(#{self.to_human(size)})".ljust(8) + " #{file}"
+          end
+          puts
         end
-        puts
       end
       if refs[:deleted].size > 0
         puts "== Deleted Media =="
-        refs[:deleted].each do |file|
-          puts "           " + " #{file}"
+        if short
+          puts "Count: " + refs[:deleted].size.to_s
+        else
+          refs[:deleted].each do |file|
+            puts "           " + " #{file}"
+          end
+          puts
         end
-        puts
       end
     end
 
-    def self.print_cache_status(refs)
+    def self.print_cache_status(refs, short)
       if refs[:unpushed].size > 0
         puts "== Unpushed Media =="
-        refs[:unpushed].each do |sha|
-          cache_file = GitMedia.media_path(sha)
-          size = File.size(cache_file)
-          puts "   " + "(#{self.to_human(size)})".ljust(8) + ' ' + sha[0, 8]
+        if short
+          puts "Count: " + refs[:unpushed].size.to_s
+        else
+          refs[:unpushed].each do |sha|
+            cache_file = GitMedia.media_path(sha)
+            size = File.size(cache_file)
+            puts "   " + "(#{self.to_human(size)})".ljust(8) + ' ' + sha[0, 8]
+          end
+          puts
         end
-        puts
       end
       if refs[:pushed].size > 0
         puts "== Already Pushed Media =="
-        refs[:pushed].each do |sha|
-          cache_file = GitMedia.media_path(sha)
-          size = File.size(cache_file)
-          puts "   " + "(#{self.to_human(size)})".ljust(8) + ' ' + sha[0, 8]
+        if short
+          puts "Count: " + refs[:pushed].size.to_s
+        else
+          refs[:pushed].each do |sha|
+            cache_file = GitMedia.media_path(sha)
+            size = File.size(cache_file)
+            puts "   " + "(#{self.to_human(size)})".ljust(8) + ' ' + sha[0, 8]
+          end
+          puts
         end
-        puts
       end
     end
 

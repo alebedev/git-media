@@ -45,12 +45,23 @@ module GitMedia
       end
 
       def get_unpushed(files)
-        keys = @s3.list_bucket(@bucket).map { |f| f[:key] }
+        # Using a set instead of a list improves performance a lot
+        # since it reduces the complexity from O(n^2) to O(n)
+        keys = Set.new()
+
+        # Apparently the list_bucket method only returns the first 1000 elements
+        # This method however will continue to give back results until all elements
+        # have been listed
+        @s3.incrementally_list_bucket(@bucket) { |contents| 
+          contents[:contents].each { |element|
+            keys.add (element[:key])
+          }
+        }
+
         files.select do |f|
           !keys.include?(f)
         end
       end
-
     end
   end
 end

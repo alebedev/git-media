@@ -35,7 +35,21 @@ module GitMedia
 
     def self.update_index
       refs = GitMedia::Status.find_references
-      `git update-index --assume-unchanged -- #{refs[:expanded].join(' ')}`
+
+      # Split references up into lists of at most 500
+      # because most OSes have limits on the size of the argument list
+      # TODO: Could probably use the --stdin flag on git update-index to be
+      # able to update it in a single call
+      refLists = refs[:expanded].each_slice(500).to_a
+
+      refLists.each {
+        |refList|
+
+        refList = refList.map { |v| "\"" + v + "\""}
+
+        `git update-index --assume-unchanged -- #{refList.join(' ')}`
+      }
+      
       puts "Updated git index"
     end
 

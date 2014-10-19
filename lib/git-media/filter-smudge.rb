@@ -12,7 +12,7 @@ module GitMedia
         media_file = File.join(media_buffer, sha.chomp)
         if File.exists?(media_file)
           STDERR.puts('recovering media : ' + sha)
-          File.open(media_file, 'r') do |f|
+          File.open(media_file, 'rb') do |f|
             while data = f.read(4096) do
               print data
             end

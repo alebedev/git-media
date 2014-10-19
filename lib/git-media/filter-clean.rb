@@ -16,7 +16,7 @@ module GitMedia
       
       # read in buffered chunks of the data
       #  calculating the SHA and copying to a tempfile
-      tempfile = Tempfile.new('media')
+      tempfile = Tempfile.new('media', :binmode=true)
       while data = STDIN.read(4096)
         hashfunc.update(data)
         tempfile.write(data)

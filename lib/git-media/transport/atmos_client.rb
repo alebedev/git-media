@@ -28,7 +28,7 @@ module GitMedia
       end
 
       def get_file(sha, to_file)
-        dst_file = File.new(to_file, File::CREAT|File::RDWR)
+        dst_file = File.new(to_file, File::CREAT|File::RDWR|File::BINARY)
         @atmos_client.get(:namespace => sha).data_as_stream do |chunck|
           dst_file.write(chunck)
         end
@@ -39,7 +39,7 @@ module GitMedia
       end
 
       def put_file(sha, from_file)
-        src_file = File.open(from_file)
+        src_file = File.open(from_file,"rb")
         obj_conf = {:data => src_file, :length => File.size(from_file), :namespace => sha}
         obj_conf[:listable_metadata] = {@tag => true} if @tag
         @atmos_client.create(obj_conf)

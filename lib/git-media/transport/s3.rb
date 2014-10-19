@@ -29,7 +29,7 @@ module GitMedia
       end
 
       def get_file(sha, to_file)
-        to = File.new(to_file, File::CREAT|File::RDWR)
+        to = File.new(to_file, File::CREAT|File::RDWR|File::BINARY)
         @s3.get(@bucket, sha) do |chunk|
           to.write(chunk)
         end
@@ -41,7 +41,7 @@ module GitMedia
       end
 
       def put_file(sha, from_file)
-        @s3.put(@bucket, sha,  File.open(from_file))
+        @s3.put(@bucket, sha,  File.open(from_file,"rb"))
       end
 
       def get_unpushed(files)

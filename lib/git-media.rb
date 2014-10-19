@@ -153,7 +153,10 @@ module GitMedia
 usage: git media sync|status|clear
 
   sync		Sync files with remote server
+
   status	Show files that are waiting to be uploaded and file size
+      --short:  Displays a shorter status message
+
   clear		Upload and delete the local cache of media files
 
 EOF

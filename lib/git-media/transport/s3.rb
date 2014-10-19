@@ -30,10 +30,25 @@ module GitMedia
 
       def get_file(sha, to_file)
         to = File.new(to_file, File::CREAT|File::RDWR|File::BINARY)
-        @s3.get(@bucket, sha) do |chunk|
-          to.write(chunk)
+        begin
+          @s3.get(@bucket, sha) do |chunk|
+            to.write(chunk)
+          end
+          to.close
+          return true
+        rescue RightAws::AwsError => e
+          # Delete the file to make sure it is not expanded
+          to.close
+          File.delete(to_file)
+
+          # Ugly, but AwsError does not seem to give me much choice
+          if e.message.include?('NoSuchKey')
+            STDERR.puts("Storage backend did not contain file : "+sha+", have you run 'git media sync' from all repos?")
+            return false
+          else
+            raise e
+          end
         end
-        to.close
       end
 
       def write?

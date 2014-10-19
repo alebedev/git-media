@@ -19,7 +19,9 @@ module GitMedia
       files = files.map { |f| s = f.split("\t"); [s[0].split(' ').last, s[1]] }
       files = files.select { |f| f[0] == '41' } # it's the right size
       files.each do |tree_size, fname|
-        if size = File.size?(fname)
+        if File.exists?(fname)
+          size = File.size(fname)
+
           # Windows newlines can offset file size by 1
           if size == tree_size.to_i or size == tree_size.to_i + 1
             # TODO: read in the data and verify that it's a sha + newline

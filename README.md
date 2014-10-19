@@ -36,6 +36,7 @@ or in `clone/.git/config` (for per-repo settings).
 ```ini
 [git-media]
 	transport = <scp|local|s3|atmos|webdav>
+	autodownload = <true|false>
 
 	# settings for scp transport
 	scpuser = <user>
@@ -63,7 +64,6 @@ or in `clone/.git/config` (for per-repo settings).
 	webdavverifyserver = <Net::Dav.verify_server setting, true by default>
 	webdavbinarytransfer = <Net::Dav.new :curl option value, false by default>
 
-
 ```
 
 
@@ -89,8 +89,11 @@ you need to explicitly tell git that some media files has changed:
 
 
 ## Config Settings
+	
+If autodownload is set to true, required files will automatically be
+downloaded when checking out or pulling. Default is false
 
-	$ git config --global media.auto-download false
+	$ git config --global media.autodownload true
 
 
 ## Installing

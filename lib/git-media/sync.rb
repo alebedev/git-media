@@ -25,12 +25,12 @@ module GitMedia
           @pull.pull(file, sha)
         end
 
-        puts "Expanding " + (index+1).to_s + " of " + status[:to_expand].length.to_s + " " + sha[0,8] + " : " + file
+        puts "Expanding " + (index+1).to_s + " of " + status[:to_expand].length.to_s + " : " + sha[0,8] + " : " + file
 
         if File.exist?(cache_file)
           FileUtils.cp(cache_file, file)
         else
-          puts 'could not get media'
+          puts 'Could not get media from storage'
         end
       end
     end
@@ -39,7 +39,7 @@ module GitMedia
       refs = GitMedia::Status.find_references
 
       # Split references up into lists of at most 500
-      # because most OSes have limits on the size of the argument list
+      # because most OSs have limits on the size of the argument list
       # TODO: Could probably use the --stdin flag on git update-index to be
       # able to update it in a single call
       refLists = refs[:expanded].each_slice(500).to_a

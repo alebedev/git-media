@@ -11,13 +11,23 @@ module GitMedia
   module Transport
     class S3 < Base
 
-      def initialize(bucket, access_key_id = nil, secret_access_key = nil)
+      def initialize(bucket, access_key_id = nil, secret_access_key = nil)    
         @s3 = RightAws::S3Interface.new(access_key_id, secret_access_key,
               {:multi_thread => true, :logger => Logger.new(File.expand_path('~/.git-media.s3.log'))})
+    
         @bucket = bucket
-        @buckets = @s3.list_all_my_buckets.map { |a| a[:name] }
+
+        begin
+          @buckets = @s3.list_all_my_buckets.map { |a| a[:name] }
+        rescue RightAws::AwsError
+          # Need to use STDERR because this might be called inside a filter
+          STDERR.puts ("Failed to connect to storage backend (S3)")
+          raise
+        end
+
         if !@buckets.include?(bucket)
-          puts "Creating New Bucket"
+          # Need to use STDERR because this might be called inside a filter
+          STDERR.puts ("Creating New Bucket")
           if @s3.create_bucket(bucket)
             @buckets << bucket
           end
@@ -43,10 +53,12 @@ module GitMedia
 
           # Ugly, but AwsError does not seem to give me much choice
           if e.message.include?('NoSuchKey')
-            STDERR.puts("Storage backend did not contain file : "+sha+", have you run 'git media sync' from all repos?")
+            STDERR.puts("Storage backend (S3) did not contain file : "+sha+", have you run 'git media sync' from all repos?")
             return false
           else
-            raise e
+            # Need to use STDERR because this might be called inside a filter
+            STDERR.puts ("Downloading file from S3 failed with error:\n" + e.message)
+            return false
           end
         end
       end

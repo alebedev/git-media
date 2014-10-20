@@ -16,26 +16,42 @@ module GitMedia
 
     def self.expand_references
       status = GitMedia::Status.find_references
-      status[:to_expand].each do |file, sha|
+      status[:to_expand].each_with_index do |tuple, index|
+        file = tuple[0]
+        sha = tuple[1]
         cache_file = GitMedia.media_path(sha)
         if !File.exist?(cache_file)
           puts "Downloading " + sha[0,8] + " : " + file
           @pull.pull(file, sha)
         end
 
-        puts "Expanding  " + sha[0,8] + " : " + file
+        puts "Expanding " + (index+1).to_s + " of " + status[:to_expand].length.to_s + " : " + sha[0,8] + " : " + file
 
         if File.exist?(cache_file)
           FileUtils.cp(cache_file, file)
         else
-          puts 'could not get media'
+          puts 'Could not get media from storage'
         end
       end
     end
 
     def self.update_index
       refs = GitMedia::Status.find_references
-      `git update-index --assume-unchanged -- #{refs[:expanded].join(' ')}`
+
+      # Split references up into lists of at most 500
+      # because most OSs have limits on the size of the argument list
+      # TODO: Could probably use the --stdin flag on git update-index to be
+      # able to update it in a single call
+      refLists = refs[:expanded].each_slice(500).to_a
+
+      refLists.each {
+        |refList|
+
+        refList = refList.map { |v| "\"" + v + "\""}
+
+        `git update-index --assume-unchanged -- #{refList.join(' ')}`
+      }
+      
       puts "Updated git index"
     end
 
@@ -43,8 +59,8 @@ module GitMedia
       # find files in media buffer and upload them
       all_cache = Dir.chdir(GitMedia.get_media_buffer) { Dir.glob('*') }
       unpushed_files = @push.get_unpushed(all_cache)
-      unpushed_files.each do |sha|
-        puts 'uploading ' + sha[0, 8]
+      unpushed_files.each_with_index do |sha, index|
+        puts "Uploading " + sha[0, 8] + " " + (index+1).to_s + " of " + unpushed_files.length.to_s
         @push.push(sha)
       end
       # TODO: if --clean, remove them

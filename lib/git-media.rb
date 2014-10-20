@@ -123,6 +123,10 @@ module GitMedia
   module Application
     def self.run!
 
+      if !system('git rev-parse')
+        return
+      end
+      
       cmd = ARGV.shift # get the subcommand
       cmd_opts = case cmd
         when "filter-clean" # parse delete options
@@ -139,16 +143,20 @@ module GitMedia
           GitMedia::Sync.run!
         when 'status'
           require 'git-media/status'
-          Trollop::options do
+          opts = Trollop::options do
             opt :force, "Force status"
+            opt :short, "Short status"
           end
-          GitMedia::Status.run!
+          GitMedia::Status.run!(opts)
         else
 	  print <<EOF
 usage: git media sync|status|clear
 
   sync		Sync files with remote server
+
   status	Show files that are waiting to be uploaded and file size
+      --short:  Displays a shorter status message
+
   clear		Upload and delete the local cache of media files
 
 EOF

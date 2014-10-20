@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "git-media"
-  s.version = "0.1.4"
+  s.version = "0.1.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Scott Chacon", "Alexander Lebedev"]
-  s.date = "2014-09-22"
+  s.date = "2014-10-20"
   s.email = "alexander.lebedev@gmail.com"
   s.executables = ["git-media"]
   s.extra_rdoc_files = [

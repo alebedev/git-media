@@ -47,7 +47,7 @@ module GitMedia
       end
 
       def put_file(sha, from_file)
-        @dav.put(get_path(sha), File.open(from_file, "rb"), File.size(from_file)
+        @dav.put(get_path(sha), File.open(from_file, "rb"), File.size(from_file))
       end
 
       def get_unpushed(files)

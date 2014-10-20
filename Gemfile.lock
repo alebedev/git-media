@@ -10,6 +10,7 @@ GEM
   specs:
     log4r (1.1.10)
     mini_portile (0.6.0)
+    netrc (0.8.0)
     nokogiri (1.6.3.1-x86-mingw32)
       mini_portile (= 0.6.0)
     proxies (0.2.1)
@@ -29,6 +30,7 @@ PLATFORMS
 
 DEPENDENCIES
   net_dav!
+  netrc
   right_aws
   ruby-atmos-pure
   s3

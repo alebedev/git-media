@@ -24,6 +24,19 @@ module GitMedia
     self.get_transport
   end
 
+  def self.get_credentials_from_netrc(url)
+    require 'uri'
+    require 'netrc'
+
+    uri = URI(url)
+    hostname = uri.host
+    unless hostname
+      raise "Cannot identify hostname within git-media.webdavurl value"
+    end
+    netrc = Netrc.read
+    netrc[hostname]
+  end
+
   def self.get_transport
     transport = `git config git-media.transport`.chomp
     case transport
@@ -96,6 +109,7 @@ module GitMedia
       GitMedia::Transport::AtmosClient.new(endpoint, uid, secret, tag)
     when "webdav"
       require 'git-media/transport/webdav'
+
       url = `git config git-media.webdavurl`.chomp
       user = `git config git-media.webdavuser`.chomp
       password = `git config git-media.webdavpassword`.chomp
@@ -105,9 +119,12 @@ module GitMedia
         raise "git-media.webdavurl not set for webdav transport"
       end
       if user == ""
+        user, password = self.get_credentials_from_netrc(url)
+      end
+      if !user
         raise "git-media.webdavuser not set for webdav transport"
       end
-      if password == ""
+      if !password
         raise "git-media.webdavpassword not set for webdav transport"
       end
       GitMedia::Transport::WebDav.new(url, user, password, verify_server, binary_transfer)
@@ -126,7 +143,7 @@ module GitMedia
       if !system('git rev-parse')
         return
       end
-      
+
       cmd = ARGV.shift # get the subcommand
       cmd_opts = case cmd
         when "filter-clean" # parse delete options

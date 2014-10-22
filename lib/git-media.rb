@@ -38,10 +38,10 @@ module GitMedia
       path = `git config git-media.scppath`.chomp
       port = `git config git-media.scpport`.chomp
       if user === ""
-	      raise "git-media.scpuser not set for scp transport"
+        raise "git-media.scpuser not set for scp transport"
       end
       if host === ""
-	      raise "git-media.scphost not set for scp transport"
+        raise "git-media.scphost not set for scp transport"
       end
       if path === ""
         raise "git-media.scppath not set for scp transport"
@@ -64,13 +64,13 @@ module GitMedia
       key = `git config git-media.s3key`.chomp
       secret = `git config git-media.s3secret`.chomp
       if bucket === ""
-	      raise "git-media.s3bucket not set for s3 transport"
+        raise "git-media.s3bucket not set for s3 transport"
       end
       if key === ""
-	      raise "git-media.s3key not set for s3 transport"
+        raise "git-media.s3key not set for s3 transport"
       end
       if secret === ""
-	      raise "git-media.s3secret not set for s3 transport"
+        raise "git-media.s3secret not set for s3 transport"
       end
       GitMedia::Transport::S3.new(bucket, key, secret)
 
@@ -148,16 +148,30 @@ module GitMedia
             opt :short, "Short status"
           end
           GitMedia::Status.run!(opts)
+        when 'retroactively-apply'
+          require 'git-media/filter-branch'
+          GitMedia::FilterBranch.clean!
+          arg2 = "--index-filter 'git media index-filter #{ARGV.shift}'"
+          system("git filter-branch #{arg2} --tag-name-filter cat -- --all")
+          GitMedia::FilterBranch.clean!
+        when 'index-filter'
+          require 'git-media/filter-branch'
+          GitMedia::FilterBranch.run!
         else
-	  print <<EOF
+    print <<EOF
 usage: git media sync|status|clear
 
-  sync		Sync files with remote server
+  sync                 Sync files with remote server
 
-  status	Show files that are waiting to be uploaded and file size
-      --short:  Displays a shorter status message
+  status               Show files that are waiting to be uploaded and file size
+                       --short:  Displays a shorter status message
 
-  clear		Upload and delete the local cache of media files
+  clear                Upload and delete the local cache of media files
+
+  retroactively-apply  [Experimental] Rewrite history to add files from previous commits to git-media
+                       Takes a single argument which is an absolute path to a file which should contain all file paths to rewrite
+                       This file could for example be generated using
+                       'git log --pretty=format: --name-only --diff-filter=A | sort -u | egrep ".*\.(jpg|png)" > to_rewrite'
 
 EOF
         end

@@ -5,14 +5,13 @@ require 'tempfile'
 module GitMedia
   module FilterClean
 
-    def self.run!
+    def self.run!(input=STDIN, output=STDOUT, info_output=true)
       
       # Read first 42 bytes
       # If the file is only 41 bytes long (as in the case of a stub)
       # it will only return a string with a length of 41
-      data = STDIN.read(42)
-
-      STDOUT.binmode
+      data = input.read(42)
+      output.binmode
 
       if data != nil && data.length == 41 && data.match(/^[0-9a-fA-F]+\n$/)
         
@@ -22,8 +21,11 @@ module GitMedia
         # "[hex string]:git-media"
         # to really be able to say that a file is a stub
 
-        STDOUT.write (data)
-        STDERR.puts("Skipping unexpanded stub : " + data[0, 8])
+        output.write (data)
+
+        if info_output
+          STDERR.puts("Skipping unexpanded stub : " + data[0, 8])
+        end
 
       else
 
@@ -43,22 +45,25 @@ module GitMedia
           tempfile.write(data)
         end
 
-        while data = STDIN.read(4096)
+        while data = input.read(4096)
           hashfunc.update(data)
           tempfile.write(data)
         end
         tempfile.close
 
         # calculate and print the SHA of the data
-        STDOUT.print hx = hashfunc.hexdigest 
-        STDOUT.write("\n")
+        output.print hx = hashfunc.hexdigest 
+        output.write("\n")
 
         # move the tempfile to our media buffer area
         media_file = File.join(media_buffer, hx)
         FileUtils.mv(tempfile.path, media_file)
 
         elapsed = Time.now - start
-        STDERR.puts('Saving media : ' + hx + ' : ' + elapsed.to_s)
+
+        if info_output
+          STDERR.puts('Saving media : ' + hx + ' : ' + elapsed.to_s)
+        end
       end
     end
 

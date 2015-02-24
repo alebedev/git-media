@@ -8,11 +8,20 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    boxr (0.13.0)
+      hashie (~> 3.3)
+      httpclient (~> 2.5)
+      oj (~> 2.11)
+    hashie (3.4.0)
+    httpclient (2.6.0.1)
     log4r (1.1.10)
     mini_portile (0.6.0)
     netrc (0.8.0)
+    nokogiri (1.6.3.1)
+      mini_portile (= 0.6.0)
     nokogiri (1.6.3.1-x86-mingw32)
       mini_portile (= 0.6.0)
+    oj (2.11.4)
     proxies (0.2.1)
     right_aws (3.1.0)
       right_http_connection (>= 1.2.5)
@@ -26,9 +35,11 @@ GEM
     trollop (2.0)
 
 PLATFORMS
+  ruby
   x86-mingw32
 
 DEPENDENCIES
+  boxr
   net_dav!
   netrc
   right_aws

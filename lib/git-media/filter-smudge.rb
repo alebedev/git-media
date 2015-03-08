@@ -2,6 +2,11 @@ module GitMedia
   module FilterSmudge
 
     def self.print_stream(stream)
+      # create a binary stream to write to stdout
+      # this avoids messing up line endings on windows
+      outstream = IO.try_convert(STDOUT)
+      outstream.binmode
+
       while data = stream.read(4096) do
         print data
       end

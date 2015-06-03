@@ -113,9 +113,8 @@ It is important to switch off git smart newline character support for media file
 Use `-crlf` switch in `.gitattributes` (for example `*.mov filter=media -crlf`) or config option `core.autocrlf = false`.
 
 If installing on windows, you might run into a problem verifying certificates
-for S3 or something. If that happens, see the following Gist:
-
-    https://gist.github.com/luislavena/f064211759ee0f806c88
+for S3 or something. If that happens, see the [instructions in this Gist for how
+to update your RubyGems to the proper certificates](https://gist.github.com/luislavena/f064211759ee0f806c88).
 
 ## Copyright
 

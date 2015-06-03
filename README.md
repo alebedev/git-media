@@ -113,13 +113,9 @@ It is important to switch off git smart newline character support for media file
 Use `-crlf` switch in `.gitattributes` (for example `*.mov filter=media -crlf`) or config option `core.autocrlf = false`.
 
 If installing on windows, you might run into a problem verifying certificates
-for S3 or something. If that happens, modify
+for S3 or something. If that happens, see the following Gist:
 
-	C:\Ruby191\lib\ruby\gems\1.9.1\gems\right_http_connection-1.2.4\lib\right_http_connection.rb
-
-And add at line 310, right before `@http.start`:
-
-      @http.verify_mode     = OpenSSL::SSL::VERIFY_NONE
+    https://gist.github.com/luislavena/f064211759ee0f806c88
 
 ## Copyright
 

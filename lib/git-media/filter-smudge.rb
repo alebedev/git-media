@@ -11,6 +11,8 @@ module GitMedia
       media_buffer = GitMedia.get_media_buffer
       
       # read checksum size
+      STDIN.binmode
+      STDOUT.binmode
       orig = STDIN.readline(64)
       sha = orig.strip # read no more than 64 bytes
       if STDIN.eof? && sha.length == 40 && sha.match(/^[0-9a-fA-F]+$/) != nil

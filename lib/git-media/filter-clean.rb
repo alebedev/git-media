@@ -7,6 +7,7 @@ module GitMedia
 
     def self.run!(input=STDIN, output=STDOUT, info_output=true)
       
+      input.binmode
       # Read first 42 bytes
       # If the file is only 41 bytes long (as in the case of a stub)
       # it will only return a string with a length of 41

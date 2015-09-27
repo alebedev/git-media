@@ -128,6 +128,29 @@ module GitMedia
         raise "git-media.webdavpassword not set for webdav transport"
       end
       GitMedia::Transport::WebDav.new(url, user, password, verify_server, binary_transfer)
+    when "box"
+      require 'git-media/transport/box'
+
+      client_id = `git config git-media.boxclientid`.chomp
+      client_secret = `git config git-media.boxclientsecret`.chomp
+      redirect_uri = `git config git-media.boxredirecturi`.chomp
+      folder_id = `git config git-media.boxfolderid`.chomp
+
+      access_token = `git config git-media.boxaccesstoken`.chomp
+      refresh_token = `git config git-media.boxrefreshtoken`.chomp
+      if client_id == ""
+        raise "git-media.boxclientid not set for box transport"
+      end
+      if client_secret == ""
+        raise "git-media.boxclientsecret not set for box transport"
+      end
+      if redirect_uri == ""
+        raise "git-media.boxredirecturi not set for box transport"
+      end
+      if folder_id == ""
+        raise "git-media.boxfolderid not set for box transport"
+      end
+      GitMedia::Transport::Box.new(client_id, client_secret, redirect_uri, folder_id, access_token, refresh_token)
     else
       raise "Invalid transport #{transport}"
     end

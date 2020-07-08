@@ -24,7 +24,7 @@ module GitMedia
       end
 
       def exist?(file)
-        if `ssh #{@user}@#{@host} #{@sshport} [ -f "#{file}" ] && echo 1 || echo 0`.chomp == "1"
+        if `ssh #{@user}@#{@host} #{@sshport} [ -f "#{file}" ] && echo 1 || echo 0`[0] == "1"
           puts file + " exists"
           return true
         else
